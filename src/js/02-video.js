@@ -18,7 +18,7 @@ player.on(
 const getCurrentTime = localStorage.getItem('videoplayer-current-time');
 
 player
-  .setCurrentTime(getCurrentTime)
+  .setCurrentTime(getCurrentTime, 0)
   .then(function (seconds) {
     console.log(seconds);
   })
