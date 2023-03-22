@@ -1,5 +1,7 @@
 import throttle from 'lodash.throttle';
 const Form = document.querySelector('form');
+const inputEL = document.querySelector('.feedback-form input');
+const textareaEl = document.querySelector('.feedback-form textarea');
 
 let formData = {};
 
@@ -10,22 +12,24 @@ function onTextAreaInput(evt) {
   localStorage.setItem('feedback-form-state', JSON.stringify(formData));
 }
 
-function populateTextArea() {
-  try {
-    const savedMessage = localStorage.getItem('feedback-form-state');
-    const formDataGet = JSON.parse(savedMessage);
-    Form.email.value = formDataGet.email;
-    Form.message.value = formDataGet.message;
-  } catch (error) {
-    console.log(error.name);
-    console.log(error.message);
-  }
-}
-populateTextArea();
 Form.addEventListener('submit', onFormSubmit);
 function onFormSubmit(evt) {
   evt.preventDefault();
-  console.log(JSON.parse(localStorage.getItem('feedback-form-state')));
-  localStorage.removeItem('feedback-form-state');
-  formValue.reset();
+  if (inputEL.value !== '' && textareaEl.value !== '') {
+    console.log(JSON.parse(localStorage.getItem('feedback-form-state')));
+    localStorage.removeItem('feedback-form-state');
+    Form.reset();
+    return;
+  }
+  alert('Fill in all fields');
+}
+
+populateTextArea();
+function populateTextArea() {
+  const savedMessage = localStorage.getItem('feedback-form-state');
+  if (savedMessage) {
+    const formDataGet = JSON.parse(savedMessage);
+    inputEL.value = formDataGet.email || '';
+    textareaEl.value = formDataGet.message || '';
+  }
 }
